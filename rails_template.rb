@@ -474,13 +474,15 @@ get "https://github.com/paulirish/html5-boilerplate/raw/master/apple-touch-icon-
 # Finish up
 #----------------------------------------------------------------------------
 
+# Migrate database
+run "bundle exec rake db:migrate"
+
+
 # Git
 puts "Adding all files to git repository and making the 'initial commit'."
 git :add => "."
 git :commit => "-m 'Initial commit'"
 
-# Migrate database
-run "bundle exec rake db:migrate"
 
 # Done!
 puts "Done setting up your new Rails app. Have fun!"
