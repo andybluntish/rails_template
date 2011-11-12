@@ -29,14 +29,16 @@ run "echo 'TODO' > README.md"
 run "echo 'TODO' > TODO.md"
 
 # Move database.yml
-puts "Backup database.yml since we're not including it in the git repository."
+puts "Backup database.yml and app_config.yml since we're not including them in the git repository."
 run "cp config/database.yml config/database.yml.example"
+run "cp config/app_config.yml config/app_config.yml.example"
 
 # Add to .gitignore
 puts "Extend .gitignore to keep our repository clean and safe."
 append_file ".gitignore" do
 <<-END
 config/database.yml
+config/app_config.yml
 *.swp
 *~
 .DS_Store
