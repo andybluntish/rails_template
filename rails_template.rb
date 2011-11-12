@@ -104,12 +104,6 @@ inject_into_file 'config/environments/test.rb', :after => "config.active_support
 END
 end
 
-## Use database for sessions
-#puts "Switch to ActiveRecord session store."
-#gsub_file 'config/initializers/session_store.rb', "#{app_name}::Application.config.session_store :cookie_store",   "# #{app_name}::Application.config.session_store :cookie_store"
-#gsub_file "config/initializers/session_store.rb", "# #{app_name}::Application.config.session_store :active_record_store", "#{app_name}::Application.config.session_store :active_record_store"
-#generate "session_migration"
-
 
 #----------------------------------------------------------------------------
 # Gems
