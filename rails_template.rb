@@ -284,10 +284,10 @@ describe ApplicationHelper do
     flash_messages.should be_nil
 
     flash[:notice] = "Hello world."
-    flash_messages.should == %Q{<div id="flash-messages"><div class="flash-notice">Hello world.<a href="#" class="close" title="close">X</a></div></div>}
+    flash_messages.should == %Q{<div id="flash-messages"><div class="flash-notice">Hello world.</div></div>}
 
     flash[:warning] = "Hey...be careful!"
-    flash_messages.should == %Q{<div id="flash-messages"><div class="flash-notice">Hello world.<a href="#" class="close" title="close">X</a></div><div class="flash-warning">Hey...be careful!<a href="#" class="close" title="close">X</a></div></div>}
+    flash_messages.should == %Q{<div id="flash-messages"><div class="flash-notice">Hello world.</div><div class="flash-warning">Hey...be careful!</div></div>}
   end
 
   # Return the title on a per-page basis
@@ -347,7 +347,7 @@ inject_into_file "app/helpers/application_helper.rb", :after => "module Applicat
     unless flash.blank?
       msg = '<div id="flash-messages">'
       flash.each do |key, message|
-        msg << %Q{<div class="flash-#{ '#{key}' }">#{ '#{message}' }<a href="#" class="close" title="close">X</a></div>}
+        msg << %Q{<div class="flash-#{ '#{key}' }">#{ '#{message}' }</div>}
       end
       "#{ '#{msg}' }</div>".html_safe
     end
