@@ -410,34 +410,30 @@ puts "Get H5BP Stylesheets."
 run "rm app/assets/stylesheets/application.css"
 get "https://github.com/h5bp/html5-boilerplate/raw/master/css/style.css", "app/assets/stylesheets/application.css.scss.erb"
 
+
 # JavaScript
 puts "Get H5BP JavaScripts."
-get "https://github.com/h5bp/html5-boilerplate/raw/master/js/script.js", "app/assets/javascripts/script.js"
-get "https://github.com/h5bp/html5-boilerplate/raw/master/js/plugins.js", "app/assets/javascripts/plugins.js"
-gsub_file 'app/assets/javascripts/application.js', "//= require_tree ." do
-<<-END
-//= require plugins
-//= require script
-END
-end
-inject_into_file 'app/assets/javascripts/application.js', :before => "//= require jquery\n" do
-  "//= require modernizr\n"
-end
+gsub_file 'app/assets/javascripts/application.js', "//= require jquery\n", "//= require modernizr\n//= require jquery\n"
+gsub_file 'app/assets/javascripts/application.js', "//= require_tree .", "//= require_self\n//= require_directory ."
+
 
 # IE
 puts "Get JavaScripts to help IE."
 run "mkdir app/assets/javascripts/ie"
 file "app/assets/javascripts/ie/ie.js" do
 <<-END
-// FIXME: Tell people that this is a manifest file, real code should go into discrete files
-// FIXME: Tell people how Sprockets and CoffeeScript works
-//
-//= require ie/DOMAssistant
+//= require ie/jquery-extra-selectors
 //= require ie/selectivizr
 END
 end
-get "http://domassistant.googlecode.com/files/DOMAssistantComplete-2.8.js", "app/assets/javascripts/ie/DOMAssistant.js"
+get "https://github.com/keithclark/JQuery-Extended-Selectors/raw/master/jquery-extra-selectors.js", "app/assets/javascripts/ie/jquery-extra-selectors.js"
 get "https://github.com/keithclark/selectivizr/raw/master/selectivizr.js", "app/assets/javascripts/ie/selectivizr.js"
+
+puts "Add the new IE JavaScript file to precompile list."
+inject_into_file 'config/environments/production.rb', :after => "application.css, and all non-JS/CSS are already added)\n" do
+  "  config.assets.precompile += %w(ie/ie.js)"
+end
+
 
 # index.html
 puts "Get H5BP application layout."
