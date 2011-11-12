@@ -143,8 +143,12 @@ append_to_file 'Gemfile' do
 <<-END
 
 group :development, :test do
+  gem 'awesome_print', require: 'ap'
   gem 'rspec-rails'
   gem 'launchy'
+  gem 'rb-fsevent', require: false
+  gem 'guard-rspec'
+  gem 'guard-livereload'
 end
 
 group :development do
@@ -227,6 +231,10 @@ inject_into_file 'config/routes.rb', :after => "routes.draw do" do
   "\n  root :to => 'high_voltage/pages#show', :id => 'home'\n"
 end
 gsub_file 'config/routes.rb', /  #.*end/m, 'end'
+
+puts "Generate Guardfile for Livereload and RSpec."
+run "guard init livereload"
+run "guard init rspec"
 
 
 #----------------------------------------------------------------------------
