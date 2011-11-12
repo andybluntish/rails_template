@@ -63,8 +63,8 @@ inject_into_file "config/application.rb", :before => "    # Enable the asset pip
 <<-END
     # Setup generators
     config.generators do |g|
-      g.scaffold :stylesheets => false
-      g.scaffold :javascripts => false
+      g.stylesheets false
+      g.javascripts false
     end
 
 END
