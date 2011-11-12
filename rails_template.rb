@@ -117,7 +117,7 @@ gem 'modernizr-rails'
 gem 'responders'
 gem 'simple_form'
 gem 'high_voltage'
-gem 'redcarpet'
+gem 'rdiscount'
 
 # Need a JavaScript runtime?
 # gem 'therubyracer'
@@ -292,10 +292,16 @@ describe ApplicationHelper do
   end
 
   # Render input using Markdown
-  it "should render input to HTML using Liquid and Markdown" do
+  it "should render input to HTML using Markdown" do
     input = "This is some _Markdown_ content.\n\nHere's **another** paragraph."
-    markup(input).should == "<p>This is some <em>Markdown</em> content.</p>\n\n<p>Here&rsquo;s <strong>another</strong> paragraph.</p>\n"
-    markup(nil).should == ""
+    markup(input).should == %Q{<p>This is some <em>Markdown</em> content.</p>\n\n<p>Here&rsquo;s <strong>another</strong> paragraph.</p>\n}
+    markup(nil).should == "\n"
+  end
+
+  # Render input using Markdown, but inline elements only
+  it "should render input to HTML using Markdown and strip block-level elements" do
+    input = "This is some _Markdown_ content."
+    inline_markup(input).should == %Q{This is some <em>Markdown</em> content.\n}
   end
 
   # Format Datetime into HTML5 <time> compliant format
@@ -352,8 +358,12 @@ inject_into_file "app/helpers/application_helper.rb", :after => "module Applicat
   # Render input as Markdown
   def markup(text = nil)
     text ||= ''
-    options = [:hard_wrap, :autolink, :smart, :no_intraemphasis, :fenced_code, :gh_blockcode]
-    Redcarpet.new(text, *options).to_html.html_safe
+    RDiscount.new(text, :smart).to_html.html_safe
+  end
+
+  # Render input as Markdown, inline elements only!
+  def inline_markup(text = '')
+    sanitize markup(text), tags: %w(em strong a img code)
   end
 
   # Format Datetime into HTML5 format
