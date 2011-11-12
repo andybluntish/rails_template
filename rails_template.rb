@@ -396,12 +396,12 @@ end
 # CSS
 puts "Get H5BP Stylesheets."
 run "rm app/assets/stylesheets/application.css"
-get "https://github.com/paulirish/html5-boilerplate/raw/master/css/style.css", "app/assets/stylesheets/application.css.scss.erb"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/css/style.css", "app/assets/stylesheets/application.css.scss.erb"
 
 # JavaScript
 puts "Get H5BP JavaScripts."
-get "https://github.com/paulirish/html5-boilerplate/raw/master/js/script.js", "app/assets/javascripts/script.js"
-get "https://github.com/paulirish/html5-boilerplate/raw/master/js/plugins.js", "app/assets/javascripts/plugins.js"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/js/script.js", "app/assets/javascripts/script.js"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/js/plugins.js", "app/assets/javascripts/plugins.js"
 gsub_file 'app/assets/javascripts/application.js', "//= require_tree ." do
 <<-END
 //= require plugins
@@ -430,7 +430,7 @@ get "https://github.com/keithclark/selectivizr/raw/master/selectivizr.js", "app/
 # index.html
 puts "Get H5BP application layout."
 run "rm app/views/layouts/application.html.erb"
-get "https://github.com/paulirish/html5-boilerplate/raw/master/index.html", "app/views/layouts/application.html.erb"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/index.html", "app/views/layouts/application.html.erb"
 
 gsub_file "app/views/layouts/application.html.erb", '<title></title>', '<title><%= title -%></title>'
 
@@ -461,15 +461,15 @@ gsub_file 'app/views/layouts/application.html.erb', 'UA-XXXXX-X', "<%= APP_CONFI
 
 # Public Files
 puts "Get H5BP Public files."
-get "https://github.com/paulirish/html5-boilerplate/raw/master/crossdomain.xml", "public/crossdomain.xml"
-get "https://github.com/paulirish/html5-boilerplate/raw/master/humans.txt", "public/humans.txt"
-get "https://github.com/paulirish/html5-boilerplate/raw/master/robots.txt", "public/robots.txt"
-get "https://github.com/paulirish/html5-boilerplate/raw/master/favicon.ico", "public/favicon.ico"
-get "https://github.com/paulirish/html5-boilerplate/raw/master/apple-touch-icon.png", "public/apple-touch-icon.png"
-get "https://github.com/paulirish/html5-boilerplate/raw/master/apple-touch-icon-precomposed.png", "public/apple-touch-icon-precomposed.png"
-get "https://github.com/paulirish/html5-boilerplate/raw/master/apple-touch-icon-72x72-precomposed.png", "public/apple-touch-icon-72x72-precomposed.png"
-get "https://github.com/paulirish/html5-boilerplate/raw/master/apple-touch-icon-57x57-precomposed.png", "public/apple-touch-icon-57x57-precomposed.png"
-get "https://github.com/paulirish/html5-boilerplate/raw/master/apple-touch-icon-114x114-precomposed.png", "public/apple-touch-icon-114x114-precomposed.png"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/crossdomain.xml", "public/crossdomain.xml"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/humans.txt", "public/humans.txt"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/robots.txt", "public/robots.txt"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/favicon.ico", "public/favicon.ico"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/apple-touch-icon.png", "public/apple-touch-icon.png"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/apple-touch-icon-precomposed.png", "public/apple-touch-icon-precomposed.png"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/apple-touch-icon-72x72-precomposed.png", "public/apple-touch-icon-72x72-precomposed.png"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/apple-touch-icon-57x57-precomposed.png", "public/apple-touch-icon-57x57-precomposed.png"
+get "https://github.com/h5bp/html5-boilerplate/raw/master/apple-touch-icon-114x114-precomposed.png", "public/apple-touch-icon-114x114-precomposed.png"
 
 
 #----------------------------------------------------------------------------
