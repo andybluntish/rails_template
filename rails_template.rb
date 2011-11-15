@@ -232,9 +232,24 @@ inject_into_file 'config/routes.rb', :after => "routes.draw do" do
 end
 gsub_file 'config/routes.rb', /  #.*end/m, 'end'
 
-puts "Generate Guardfile for Livereload and RSpec."
+
+puts "Generate file for Livereload and RSpec. Split guards into 'frontend' and 'backend' groups."
 run "guard init livereload"
 run "guard init rspec"
+
+inject_into_file 'Guardfile', :before => "guard 'livereload'" do
+  "group 'frontend' do\n\n"
+end
+
+inject_into_file 'Guardfile', :before => "guard 'rspec'" do
+  "end\n\ngroup 'backend' do\n\n"
+end
+
+append_file "Guardfile" do <<-END
+#
+end
+END
+end
 
 
 #----------------------------------------------------------------------------
