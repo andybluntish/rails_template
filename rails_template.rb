@@ -24,14 +24,13 @@ run "rm -r test/"
 
 # Recreate the README file
 puts "Clear out README file contents and switching to Markdown. Generate TODO file."
-run "rm README"
+run "rm README.rdoc"
+run "touch README.md"
 run "echo 'TODO' > README.md"
-run "echo 'TODO' > TODO.md"
 
 # Move database.yml
-puts "Backup database.yml and app_config.yml since we're not including them in the git repository."
+puts "Backup database.yml since we're not including it in the git repository."
 run "cp config/database.yml config/database.yml.example"
-run "cp config/app_config.yml config/app_config.yml.example"
 
 # Add to .gitignore
 puts "Extend .gitignore to keep our repository clean and safe."
@@ -79,7 +78,7 @@ end
 
 # Setup mailer options
 puts "Setup mailer options."
-inject_into_file 'config/environments/development.rb', :after => "config.assets.compress = false\n" do
+inject_into_file 'config/environments/development.rb', :after => "config.assets.debug = true\n" do
 <<-END
 
   # Mail
@@ -110,37 +109,28 @@ end
 #----------------------------------------------------------------------------
 
 puts "Add to the Gemfile."
-gsub_file 'Gemfile', /^#.*\n/, ''
-inject_into_file 'Gemfile', :before => "group :test do\n" do
+append_to_file 'Gemfile' do
 <<-END
+
 gem 'modernizr-rails'
 gem 'responders'
 gem 'simple_form'
-gem 'high_voltage'
 gem 'rdiscount'
 
-# Need a JavaScript runtime?
-# gem 'therubyracer'
-
+# Static Pages
+# gem 'high_voltage'
 END
 end
 
-# Testing gems
-inject_into_file 'Gemfile', :after => "group :test do\n" do
-<<-END
-  gem 'factory_girl_rails'
-  gem 'capybara'
-  gem 'database_cleaner'
-  gem 'simplecov', :require => false
-  # gem 'timecop'
-  # gem 'fakeweb'
 
-END
-end
-
-# Development/Test and Development gems
+# Development and Test gems
 append_to_file 'Gemfile' do
 <<-END
+
+group :development do
+  gem 'capistrano'
+  gem 'letter_opener'
+end
 
 group :development, :test do
   gem 'awesome_print', require: 'ap'
@@ -151,11 +141,15 @@ group :development, :test do
   gem 'guard-livereload'
 end
 
-group :development do
-  gem 'capistrano'
-  gem 'rails-footnotes'
-  gem 'letter_opener'
+group :test do
+  gem 'factory_girl_rails'
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'simplecov', :require => false
+  # gem 'timecop'
+  # gem 'fakeweb'
 end
+
 END
 end
 
@@ -206,32 +200,6 @@ END
 puts "Install 'SimpleCov' gem."
 prepend_to_file 'spec/spec_helper.rb', "require 'simplecov'\nSimpleCov.start 'rails'\n\n"
 
-puts "Install 'High Voltage' gem, and generate a static Home Page."
-run "mkdir app/views/pages"
-file "app/views/pages/home.html.erb" do
-  "<h1>RailsApp</h1>\n<p>Welcome to your new Rails application.</p>"
-end
-
-file "spec/requests/static_pages_spec.rb" do
-<<-END
-require 'spec_helper'
-
-describe "Home Page" do
-  describe "GET /" do
-    it "displays the home page" do
-      visit root_path
-      page.should have_content("Welcome to your new Rails application")
-    end
-  end
-end
-END
-end
-
-inject_into_file 'config/routes.rb', :after => "routes.draw do" do
-  "\n  root :to => 'high_voltage/pages#show', :id => 'home'\n"
-end
-gsub_file 'config/routes.rb', /  #.*end/m, 'end'
-
 
 puts "Generate file for Livereload and RSpec. Split guards into 'frontend' and 'backend' groups."
 run "guard init livereload"
@@ -281,6 +249,10 @@ production:
   # google_analytics_ua: 'UA-XXXXX-X'
 END
 end
+
+# Backup the config file
+run "cp config/app_config.yml config/app_config.yml.example"
+
 
 
 #----------------------------------------------------------------------------
